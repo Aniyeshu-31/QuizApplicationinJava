@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import com.quiz.quizdemo.repository.QuizSessionRepository;
 import com.quiz.quizdemo.dao.QuestionDao;
+import com.quiz.quizdemo.models.QuizSession;
 import com.quiz.quizdemo.models.Question;
 import com.quiz.quizdemo.models.QuestionWrapper;
 import com.quiz.quizdemo.models.Response;
@@ -21,8 +23,22 @@ import java.util.List;
 @Service
 public class QuizService {
     @Autowired
-    QuestionDao questionDao;
+    private QuestionDao questionDao;
+    
+    @Autowired
+    private QuizSession currentSession;
 
+    @Autowired
+    private QuizSessionRepository quizSessionRepository;
+    public QuizSession startNewSession(String username) {
+        currentSession = new QuizSession();
+        currentSession.setUsername(username);
+        currentSession.setTotalQuestionsAttempted(0);
+        currentSession.setCorrectAnswers(0);
+        currentSession.setIncorrectAnswers(0);
+        quizSessionRepository.save(currentSession);
+        return currentSession;
+    }
     public ResponseEntity<List<Question>> getAllQuestions() {
         try {
             return new ResponseEntity<>(questionDao.findAll(), HttpStatus.OK);

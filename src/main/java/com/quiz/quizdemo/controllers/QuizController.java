@@ -1,6 +1,7 @@
 package com.quiz.quizdemo.controllers;
 import com.quiz.quizdemo.models.Question;
 import com.quiz.quizdemo.models.QuestionWrapper;
+import com.quiz.quizdemo.models.QuizSession;
 import com.quiz.quizdemo.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,11 @@ public class QuizController {
 
     @Autowired
     private QuizService quizService;
+    
+    @PostMapping("/start")
+    public QuizSession startNewQuizSession() {
+        return quizService.startNewSession(null);
+    }
 
     @GetMapping("/allQuestions")
     public ResponseEntity<List<Question>> getAllQuestions() {
